@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -25,6 +25,12 @@ option(
   ENABLE_OPTIMIZER_DEBUG
   "Enable OPTIMIZER_DEBUG when building. Requires Postgres server to be built with OPTIMIZER_DEBUG."
   OFF)
+
+option(ENABLE_CIFUZZ "Build fuzz tests with the cifuzz CLI tool" OFF)
+if(ENABLE_CIFUZZ)
+  find_package(cifuzz NO_SYSTEM_ENVIRONMENT_PATH)
+  enable_fuzz_testing()
+endif()
 
 # Option to enable assertions. Note that if we include headers from a PostgreSQL
 # build that has assertions enabled, we might inherit that setting without
@@ -639,6 +645,10 @@ add_subdirectory(src)
 
 if(NOT APACHE_ONLY)
   add_subdirectory(tsl)
+endif()
+
+if(ENABLE_CIFUZZ)
+  add_subdirectory(fuzzing)
 endif()
 
 add_custom_target(licensecheck

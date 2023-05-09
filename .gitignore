@@ -34,3 +34,5 @@ typedef.list
 /cmake-build-debug/
 /.idea/
 coccinelle.diff
+
+/.cifuzz-*/

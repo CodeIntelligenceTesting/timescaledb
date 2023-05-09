@@ -1,0 +1,1 @@
+#define MaxAllocSize    ((Size) 0x3fffffff) /* 1 gigabyte - 1 */
