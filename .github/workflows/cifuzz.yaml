@@ -53,7 +53,7 @@ jobs:
           fuzzing_server_address: ${{ env.FUZZING_SERVER_ADDRESS }}
           fuzzing_artifact: ${{ env.CHECKOUT_DIR }}/${{ env.FUZZING_ARTIFACT }}
           checkout_directory: ${{ env.CHECKOUT_DIR }}
-          project: "projects/api-testing-spring-boot-e8a299e2"
+          project: "projects/TimescaleDB-06d4e313"
       - id: monitor-fuzzing
         name: Fuzzing
         uses: CodeIntelligenceTesting/github-actions/monitor-fuzzing@v5
