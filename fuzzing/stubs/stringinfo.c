@@ -30,8 +30,9 @@
  #endif
   
  #include "lib/stringinfo.h"
-  
-  
+
+ #include <stdarg.h>
+
  /*
   * makeStringInfo
   *
