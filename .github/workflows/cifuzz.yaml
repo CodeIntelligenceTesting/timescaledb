@@ -22,7 +22,6 @@ env:
 jobs:
   fuzz_tests:
     runs-on: ubuntu-latest
-    container: cifuzz/builder-zint:llvm-13
     steps:
       - id: checkout
         name: Checkout Repository
@@ -35,11 +34,17 @@ jobs:
           curl --fail --silent --show-error --location -o cifuzz_installer "$CIFUZZ_DOWNLOAD_URL"
           chmod u+x cifuzz_installer
           ./cifuzz_installer --install-dir $CIFUZZ_INSTALL_DIR
+      - id: install-deps
+        name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget cmake xz-utils libpq-dev python3-dev postgresql-server-dev-14 libkrb5-dev
+          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.4/clang+llvm-16.0.4-x86_64-linux-gnu-ubuntu-22.04.tar.xz
+          sudo tar -xf clang+llvm-16.0.4-x86_64-linux-gnu-ubuntu-22.04.tar.xz -C /opt
       - id: build-fuzzers
         name: Build Fuzzers
         run: |
-          apt-get update
-          apt-get -y install libpq-dev python3-dev
+          export PATH=/opt/clang+llvm-16.0.4-x86_64-linux-gnu-ubuntu-22.04/bin:$PATH
           export cifuzz_DIR="$GITHUB_WORKSPACE/$CIFUZZ_INSTALL_DIR/share/cmake"
           cd $CHECKOUT_DIR/
           $GITHUB_WORKSPACE/$CIFUZZ_INSTALL_DIR/bin/cifuzz bundle \
